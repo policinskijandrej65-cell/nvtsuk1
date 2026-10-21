@@ -20,7 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     Car user_car_prev;
-    Car user_car;
+    Car user_car_now;
 
 private slots:
     void saveButtonPressed1();

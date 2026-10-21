@@ -2,12 +2,12 @@
 #include <QString>
 #ifndef CAR
 #define CAR
+static const QStringList CAR_TYPES = {"truck", "passenger", "bus", "trailer"};
 //машинки врум
 class Car
 {
 public:
     Car();
-    QString types[4] = {"truck", "passenger", "bus", "trailer"};
     QString car_type;
 
 private:
