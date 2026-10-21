@@ -15,6 +15,8 @@ Car::Car()
     this->date_last_delivery = QDate::currentDate();
 }
 
+
+//SETTERS
 bool validate(QString user_string)
 {
     return true;
@@ -111,4 +113,60 @@ bool Car::setDateLastDelivery(QDate user_date)
         return true;
     }
     return false;
+}
+
+//GETTERS
+QString Car::getBrandName() const
+{
+    return props.brand_name;
+}
+
+QString Car::getType() const
+{
+    return car_type; // Предполагаю, что поле называется type (добавьте props., если оно в структуре)
+}
+
+float Car::getEngineV() const
+{
+    return props.engine_V;
+}
+
+int Car::getHumanCapacity() const
+{
+    return props.human_capacity;
+}
+
+int Car::getWeightCapacity() const
+{
+    return props.weight_capacity;
+}
+
+int Car::getMaxSpeed() const
+{
+    return props.max_speed;
+}
+
+float Car::getFrom_1To_100() const
+{
+    return props.from_1_to_100;
+}
+
+bool Car::getClimateControl() const
+{
+    return props.climate_control;
+}
+
+int Car::getAmount() const
+{
+    return amount;
+}
+
+int Car::getPrice() const
+{
+    return price;
+}
+
+QDate Car::getDateLastDelivery() const
+{
+    return date_last_delivery;
 }
