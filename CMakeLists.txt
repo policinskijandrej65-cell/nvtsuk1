@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mainwindow.ui
         validator.cpp
         validator.h
-        dialog.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET lab2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
