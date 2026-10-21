@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "validator.h"
+#include "QMessageBox"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,12 +13,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Show_button1, SIGNAL(clicked()), this, SLOT(showField1()));
     connect(ui->Show_button2, SIGNAL(clicked()), this, SLOT(showField2()));
     ui->type_selector->addItems(CAR_TYPES);
+    ui->brand_name->setValidator(new Validator(this));
 }
 
 void MainWindow::saveButtonPressed1()
 {
     if (ui->current_session->value() == 1)
     {
+        QString brand = ui->brand_name->text();
+        int pos = 0;
+        Validator Validator(this);
+        if (!ui->brand_name->hasAcceptableInput())
+        {
+            QMessageBox::warning(this, "Ошибка",
+                                 "Название модели введено неверно!\n"
+                                 "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
+            return;
+        }
         user_car_now.current_session = ui->current_session->value();
         user_car_now.setAmount(ui->amount->value());
         user_car_now.setBrandName(ui->brand_name->text());
@@ -36,6 +49,16 @@ void MainWindow::saveButtonPressed2()
 {
     if (ui->current_session->value() == 2)
     {
+        QString brand = ui->brand_name->text();
+        int pos = 0;
+        Validator Validator(this);
+        if (!ui->brand_name->hasAcceptableInput())
+        {
+            QMessageBox::warning(this, "Ошибка",
+                                 "Название модели введено неверно!\n"
+                                 "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
+            return;
+        }
         user_car_prev.current_session = ui->current_session->value();
         user_car_prev.setAmount(ui->amount->value());
         user_car_prev.setBrandName(ui->brand_name->text());

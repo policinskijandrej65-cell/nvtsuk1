@@ -17,11 +17,19 @@ Validator::~Validator()
 QValidator::State Validator::validate(QString &string, int &pos) const
 {
     int strLength = string.length();
+    if (string.isEmpty())
+    {
+        return QValidator::Intermediate;
+    }
+    if (string.length() > 30)
+    {
+        return QValidator::Invalid;
+    }
     QString proper_values = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (int i = 0; i < strLength; i++)
     {
         QChar item = string[i];
-        if (!proper_values.contains(item.toUpper()) || strLength == 30)
+        if (!proper_values.contains(item.toUpper()))
         {
             return QValidator::Invalid;
         }
@@ -31,22 +39,14 @@ QValidator::State Validator::validate(QString &string, int &pos) const
 
     bool inaccurate = false;
 
-    inaccurate |= !(string.begin()->isLetter());
-    if (inaccurate) return QValidator::Intermediate;
+
+    if (!string[0].isLetter())
+    {
+        return QValidator::Intermediate;
+    }
+
     return QValidator::Acceptable;
 }
-
-
-/*
-     1. Проверка символов на стадии ввода (недопустимый -> invalid str)
-    2. Проверка на количество двоеточий, точек и слэшей (=1, >=1, >=1)
-   Если удовлетворяет, то intermediate, если нет invalid
-    3. Проверка позиций двоеточия, первого слэша и последней точки
-   (порядок = двоеточие->первый слэш->последняя точка)
-   если корректен, flag = true, если нет flag = false
-    4. Проверка состояния флага
-   если true, то acceptable*/
-
 
 
 
