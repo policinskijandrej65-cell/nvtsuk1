@@ -16,28 +16,24 @@ Validator::~Validator()
 
 QValidator::State Validator::validate(QString &string, int &pos) const
 {
-    //1
     int strLength = string.length();
+    QString proper_values = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (int i = 0; i < strLength; i++)
     {
         QChar item = string[i];
-        if (item.isLetterOrNumber() == false || strLength == 30)
+        if (!proper_values.contains(item.toUpper()) || strLength == 30)
+        {
             return QValidator::Invalid;
+        }
     }
 
 
 
     bool inaccurate = false;
 
-    //inaccurate |= lastSlash > lastDot;
-
-
+    inaccurate |= !(string.begin()->isLetter());
     if (inaccurate) return QValidator::Intermediate;
-
-
-
     return QValidator::Acceptable;
-
 }
 
 
