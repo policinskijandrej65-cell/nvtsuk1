@@ -15,44 +15,45 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::saveButtonPressed1()
 {
-    user_car_now.current_session = ui->current_session->value();
-    if (user_car_now.current_session == 1)
+    if (ui->current_session->value() == 1)
     {
+        user_car_now.current_session = ui->current_session->value();
         user_car_now.setAmount(ui->amount->value());
         user_car_now.setBrandName(ui->brand_name->text());
-        user_car_now.setClimateControl(ui->climate_control);
+        user_car_now.setClimateControl(ui->climate_control->isChecked());
         user_car_now.setDateLastDelivery(ui->date_last_delivery->date());
         user_car_now.setEngineV(ui->engine_v->value());
         user_car_now.setFrom_1To_100(ui->from_1_to_100->value());
         user_car_now.setHumanCapacity(ui->human_capacity->value());
-        user_car_now.setEngineV(ui->engine_v->value());
         user_car_now.setMaxSpeed(ui->max_speed->value());
         user_car_now.setPrice(ui->price->value());
+        user_car_now.setType(ui->type_selector->currentText());
         user_car_now.setWeightCapacity(ui->weight_capacity->value());
     }
 
 }
 void MainWindow::saveButtonPressed2()
 {
-    user_car_prev.current_session = ui->current_session->value();
-    if (user_car_prev.current_session == 2)
+    if (ui->current_session->value() == 2)
     {
+        user_car_prev.current_session = ui->current_session->value();
         user_car_prev.setAmount(ui->amount->value());
         user_car_prev.setBrandName(ui->brand_name->text());
-        user_car_prev.setClimateControl(ui->climate_control);
+        user_car_prev.setClimateControl(ui->climate_control->isChecked());
         user_car_prev.setDateLastDelivery(ui->date_last_delivery->date());
         user_car_prev.setEngineV(ui->engine_v->value());
         user_car_prev.setFrom_1To_100(ui->from_1_to_100->value());
         user_car_prev.setHumanCapacity(ui->human_capacity->value());
-        user_car_prev.setEngineV(ui->engine_v->value());
         user_car_prev.setMaxSpeed(ui->max_speed->value());
         user_car_prev.setPrice(ui->price->value());
+        user_car_prev.setType(ui->type_selector->currentText());
         user_car_prev.setWeightCapacity(ui->weight_capacity->value());
     }
 }
 
 void MainWindow::showField1()
 {
+    ui->current_session->setValue(1);
     ui->brand_name->setText(user_car_now.getBrandName());
     ui->type_selector->setCurrentText(user_car_now.getType());
     ui->engine_v->setValue(user_car_now.getEngineV());
@@ -68,6 +69,7 @@ void MainWindow::showField1()
 
 void MainWindow::showField2()
 {
+    ui->current_session->setValue(2);
     ui->brand_name->setText(user_car_prev.getBrandName());
     ui->type_selector->setCurrentText(user_car_prev.getType());
     ui->engine_v->setValue(user_car_prev.getEngineV());
