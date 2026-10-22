@@ -12,8 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Save_button2, SIGNAL(clicked()), this, SLOT(saveButtonPressed2()));
     connect(ui->Show_button1, SIGNAL(clicked()), this, SLOT(showField1()));
     connect(ui->Show_button2, SIGNAL(clicked()), this, SLOT(showField2()));
+    connect(ui->current_session, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int newValue)
+            { ui->browse_session->setCurrentRow(newValue - 1); });
     ui->type_selector->addItems(CAR_TYPES);
     ui->brand_name->setValidator(new Validator(this));
+    QStringList sessions = {"session 1", "session 2"};
+    ui->browse_session->addItems(sessions);
 }
 
 void MainWindow::saveButtonPressed1()

@@ -2,6 +2,7 @@
 
 Car::Car()
 {
+    this->current_session = 1;
     this->amount = 0;
     this->props.brand_name = QString("Empty");
     this->props.engine_V = 0;
