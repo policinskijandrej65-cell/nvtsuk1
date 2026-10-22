@@ -14,6 +14,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Show_button2, SIGNAL(clicked()), this, SLOT(showField2()));
     connect(ui->current_session, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int newValue)
             { ui->browse_session->setCurrentRow(newValue - 1); });
+
+    // Связывание клика по списку с переключением полей
+    connect(ui->browse_session, &QListWidget::currentRowChanged, this, [this](int row) {
+        if (row == 0) showField1();
+        else if (row == 1) showField2();
+    });
+
     ui->type_selector->addItems(CAR_TYPES);
     ui->brand_name->setValidator(new Validator(this));
     QStringList sessions = {"session 1", "session 2"};
@@ -24,9 +31,6 @@ void MainWindow::saveButtonPressed1()
 {
     if (ui->current_session->value() == 1)
     {
-        QString brand = ui->brand_name->text();
-        int pos = 0;
-        Validator Validator(this);
         if (!ui->brand_name->hasAcceptableInput())
         {
             QMessageBox::warning(this, "Ошибка",

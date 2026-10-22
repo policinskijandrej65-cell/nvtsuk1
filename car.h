@@ -29,7 +29,6 @@ private:
 
 public:
     //SETTERS
-    bool validate(QString user_string);
     bool setBrandName(QString user_string);
     bool setType(QString user_type);
     bool setEngineV(float user_value);

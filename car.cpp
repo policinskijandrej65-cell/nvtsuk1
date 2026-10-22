@@ -17,11 +17,6 @@ Car::Car()
 
 
 //SETTERS
-bool validate(QString user_string)
-{
-    return true;
-}
-
 bool Car::setBrandName(QString user_string)
 {
     if (user_string.length() <= 30) {
