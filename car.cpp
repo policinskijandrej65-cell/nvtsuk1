@@ -10,7 +10,6 @@ Car::Car()
     this->props.max_speed = 0;
     this->props.from_1_to_100 = 0;
     this->props.climate_control = false;
-    this->amount = 0;
     this->price = 0;
     this->date_last_delivery = QDate::currentDate();
 }

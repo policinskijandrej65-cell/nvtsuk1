@@ -25,7 +25,7 @@ QValidator::State Validator::validate(QString &string, int &pos) const
     {
         return QValidator::Invalid;
     }
-    QString proper_values = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    QString proper_values = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (int i = 0; i < strLength; i++)
     {
         QChar item = string[i];

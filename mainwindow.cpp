@@ -49,9 +49,6 @@ void MainWindow::saveButtonPressed2()
 {
     if (ui->current_session->value() == 2)
     {
-        QString brand = ui->brand_name->text();
-        int pos = 0;
-        Validator Validator(this);
         if (!ui->brand_name->hasAcceptableInput())
         {
             QMessageBox::warning(this, "Ошибка",
