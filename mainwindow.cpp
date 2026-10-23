@@ -15,11 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->current_session, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int newValue)
             { ui->browse_session->setCurrentRow(newValue - 1); });
 
-    // Связывание клика по списку с переключением полей
     connect(ui->browse_session, &QListWidget::currentRowChanged, this, [this](int row) {
         if (row == 0) showField1();
         else if (row == 1) showField2();
     });
+
+    connect(ui->type_selector, &QComboBox::currentTextChanged, this, &MainWindow::onTypeChanged);
+
+    connect(ui->amount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::onAmountChanged);
 
     ui->type_selector->addItems(CAR_TYPES);
     ui->brand_name->setValidator(new Validator(this));
@@ -93,6 +96,8 @@ void MainWindow::showField1()
     ui->amount->setValue(user_car_now.getAmount());
     ui->price->setValue(user_car_now.getPrice());
     ui->date_last_delivery->setDate(user_car_now.getDateLastDelivery());
+    onTypeChanged(ui->type_selector->currentText());
+    last_amount = user_car_now.getAmount();
 }
 
 void MainWindow::showField2()
@@ -109,6 +114,28 @@ void MainWindow::showField2()
     ui->amount->setValue(user_car_prev.getAmount());
     ui->price->setValue(user_car_prev.getPrice());
     ui->date_last_delivery->setDate(user_car_prev.getDateLastDelivery());
+    onTypeChanged(ui->type_selector->currentText());
+    last_amount = user_car_prev.getAmount();
+}
+
+void MainWindow::onTypeChanged(const QString &text)
+{
+    bool isTrailer = (text == "trailer");
+
+    ui->engine_v->setEnabled(!isTrailer);
+    ui->human_capacity->setEnabled(!isTrailer);
+    ui->max_speed->setEnabled(!isTrailer);
+    ui->from_1_to_100->setEnabled(!isTrailer);
+    ui->climate_control->setEnabled(!isTrailer);
+}
+
+void MainWindow::onAmountChanged(int newValue)
+{
+    if (newValue > last_amount)
+    {
+        ui->date_last_delivery->setDate(QDate::currentDate());
+    }
+    last_amount = newValue;
 }
 
 MainWindow::~MainWindow()

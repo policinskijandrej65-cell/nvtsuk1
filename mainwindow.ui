@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>524</width>
-    <height>649</height>
+    <height>765</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -257,9 +257,9 @@
         </property>
         <property name="minimumDate">
          <date>
-          <year>2026</year>
-          <month>10</month>
-          <day>15</day>
+          <year>1990</year>
+          <month>1</month>
+          <day>1</day>
          </date>
         </property>
        </widget>
@@ -310,7 +310,7 @@
      <x>0</x>
      <y>0</y>
      <width>524</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

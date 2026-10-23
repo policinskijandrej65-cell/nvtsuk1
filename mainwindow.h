@@ -21,11 +21,14 @@ private:
     Ui::MainWindow *ui;
     Car user_car_prev;
     Car user_car_now;
+    int last_amount = 0;
 
 private slots:
     void saveButtonPressed1();
     void saveButtonPressed2();
     void showField1();
     void showField2();
+    void onTypeChanged(const QString &text);
+    void onAmountChanged(int newValue);
 };
 #endif // MAINWINDOW_H
