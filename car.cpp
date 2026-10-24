@@ -2,7 +2,8 @@
 
 Car::Car()
 {
-    this->current_session = 1;
+    this->props.car_firm = FIRMS.at(0);
+    this->current_session = "Session 1";
     this->amount = 0;
     this->props.brand_name = QString("Empty");
     this->props.engine_V = 0;
@@ -110,6 +111,12 @@ bool Car::setDateLastDelivery(QDate user_date)
     return false;
 }
 
+bool Car::setCarFifm(QString user_string)
+{
+    props.car_firm = user_string;
+    return true;
+}
+
 //GETTERS
 QString Car::getBrandName() const
 {
@@ -164,4 +171,9 @@ int Car::getPrice() const
 QDate Car::getDateLastDelivery() const
 {
     return date_last_delivery;
+}
+
+QString Car::getCarFirm() const
+{
+    return Car::props.car_firm;
 }

@@ -2,18 +2,20 @@
 #include <QString>
 #ifndef CAR
 #define CAR
-static const QStringList CAR_TYPES = {"truck", "passenger", "bus", "trailer"};
+const QStringList CAR_TYPES = {"грузовой", "легковой", "автобус", "прицеп"};
+const QStringList FIRMS = {"ВАЗ", "Audi", "BMW", "Daewoo", "Nissan", "Renault"};
 //машинки врум
 class Car
 {
 public:
     Car();
     QString car_type;
-    int current_session;
+    QString current_session;
 
 private:
     struct MainProperties
     {
+        QString car_firm;
         QString brand_name;
         float engine_V;
         int human_capacity;
@@ -40,6 +42,7 @@ public:
     bool setAmount(int user_value);
     bool setPrice(int user_value);
     bool setDateLastDelivery(QDate user_date);
+    bool setCarFifm(QString user_string); //добавил
 
     //GETTERS
     QString getBrandName() const;
@@ -53,6 +56,7 @@ public:
     int getAmount() const;
     int getPrice() const;
     QDate getDateLastDelivery() const;
+    QString getCarFirm() const;
 };
 
 #endif // CAR

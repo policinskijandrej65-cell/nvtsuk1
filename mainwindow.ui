@@ -17,8 +17,8 @@
    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;вместимость&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" rowspan="9">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label_7">
@@ -33,272 +33,276 @@
      </layout>
     </item>
     <item row="0" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="current">
         <property name="text">
          <string>текущая запись</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="current_session">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>название модели</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>фирма</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="firm_selector_2"/>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="brand_name">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="maxLength">
-         <number>31</number>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>название модели</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="brand_name">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="maxLength">
+           <number>31</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-     </layout>
-    </item>
-    <item row="2" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>тип</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>тип</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="type_selector"/>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QComboBox" name="type_selector"/>
-      </item>
-     </layout>
-    </item>
-    <item row="3" column="1">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>основные характеристики</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>объем двигателя</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QDoubleSpinBox" name="engine_v">
-         <property name="minimum">
-          <double>0.500000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>30.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.050000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>вместимость</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QSpinBox" name="human_capacity">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>300</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>грузоподъемность</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QSpinBox" name="weight_capacity">
-         <property name="minimum">
-          <number>100</number>
-         </property>
-         <property name="maximum">
-          <number>5000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>макс скорость</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QSpinBox" name="max_speed">
-         <property name="minimum">
-          <number>60</number>
-         </property>
-         <property name="maximum">
-          <number>320</number>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>разгон до 100 км/ч</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QDoubleSpinBox" name="from_1_to_100">
-         <property name="minimum">
-          <double>5.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>120.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QCheckBox" name="climate_control">
-         <property name="layoutDirection">
-          <enum>Qt::LayoutDirection::RightToLeft</enum>
-         </property>
-         <property name="text">
-          <string>наличие системы климат контроля</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>количество</string>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>основные характеристики</string>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>объем двигателя</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="engine_v">
+           <property name="minimum">
+            <double>0.500000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>30.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.050000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>вместимость</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="human_capacity">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>300</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>грузоподъемность</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="weight_capacity">
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>5000</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>макс скорость</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="max_speed">
+           <property name="minimum">
+            <number>60</number>
+           </property>
+           <property name="maximum">
+            <number>320</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>разгон до 100 км/ч</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="from_1_to_100">
+           <property name="minimum">
+            <double>5.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>120.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="climate_control">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>наличие системы климат контроля</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="amount">
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="5" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>цена (тыс руб)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="price">
-        <property name="minimum">
-         <number>20</number>
-        </property>
-        <property name="maximum">
-         <number>3000</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="6" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
-      <item>
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>дата последнего завоза</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>количество</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="amount">
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QDateEdit" name="date_last_delivery">
-        <property name="maximumDate">
-         <date>
-          <year>2027</year>
-          <month>12</month>
-          <day>31</day>
-         </date>
-        </property>
-        <property name="minimumDate">
-         <date>
-          <year>1990</year>
-          <month>1</month>
-          <day>1</day>
-         </date>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="7" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
-      <item>
-       <widget class="QPushButton" name="Show_button1">
-        <property name="text">
-         <string>Показать запись 1</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>цена (тыс руб)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="price">
+          <property name="minimum">
+           <number>20</number>
+          </property>
+          <property name="maximum">
+           <number>3000</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="Save_button1">
-        <property name="text">
-         <string>Сохранить запись 1</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>дата последнего завоза</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="date_last_delivery">
+          <property name="maximumDate">
+           <date>
+            <year>2027</year>
+            <month>12</month>
+            <day>31</day>
+           </date>
+          </property>
+          <property name="minimumDate">
+           <date>
+            <year>1990</year>
+            <month>1</month>
+            <day>1</day>
+           </date>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-     </layout>
-    </item>
-    <item row="8" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
-       <widget class="QPushButton" name="Show_button2">
-        <property name="text">
-         <string>Показать запись 2</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QPushButton" name="Show_button1">
+          <property name="text">
+           <string>Показать запись 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Save_button1">
+          <property name="text">
+           <string>Сохранить запись 1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="Save_button2">
-        <property name="text">
-         <string>Сохранить запись 2</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QPushButton" name="Show_button2">
+          <property name="text">
+           <string>Показать запись 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Save_button2">
+          <property name="text">
+           <string>Сохранить запись 2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -313,12 +317,6 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>параметры авто</string>
-    </property>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

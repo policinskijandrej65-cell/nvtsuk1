@@ -12,27 +12,25 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Save_button2, SIGNAL(clicked()), this, SLOT(saveButtonPressed2()));
     connect(ui->Show_button1, SIGNAL(clicked()), this, SLOT(showField1()));
     connect(ui->Show_button2, SIGNAL(clicked()), this, SLOT(showField2()));
-    connect(ui->current_session, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int newValue)
-            { ui->browse_session->setCurrentRow(newValue - 1); });
+    //connect(ui->current, QOverload<QString>::of(&::), this, [this](int newValue)
+            //{ ui->browse_session->setCurrentRow((int)current[8]); });
 
-    connect(ui->browse_session, &QListWidget::currentRowChanged, this, [this](int row) {
-        if (row == 0) showField1();
-        else if (row == 1) showField2();
-    });
+    connect(ui->browse_session, &QListWidget::currentRowChanged, this, &MainWindow::currentRowChanged);
 
     connect(ui->type_selector, &QComboBox::currentTextChanged, this, &MainWindow::onTypeChanged);
 
-    connect(ui->amount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::onAmountChanged);
+    connect(ui->amount, &QSpinBox::valueChanged, this, &MainWindow::onAmountChanged);
 
     ui->type_selector->addItems(CAR_TYPES);
+    ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
-    QStringList sessions = {"session 1", "session 2"};
+    QStringList sessions = {"запись 1", "запись 2"};
     ui->browse_session->addItems(sessions);
 }
 
 void MainWindow::saveButtonPressed1()
 {
-    if (ui->current_session->value() == 1)
+    if (ui->current->text() == "запись 1")
     {
         if (!ui->brand_name->hasAcceptableInput())
         {
@@ -41,7 +39,8 @@ void MainWindow::saveButtonPressed1()
                                  "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
             return;
         }
-        user_car_now.current_session = ui->current_session->value();
+        user_car_now.setCarFifm(ui->firm_selector_2->currentText());
+        user_car_now.current_session = ui->current->text();
         user_car_now.setAmount(ui->amount->value());
         user_car_now.setBrandName(ui->brand_name->text());
         user_car_now.setClimateControl(ui->climate_control->isChecked());
@@ -58,7 +57,7 @@ void MainWindow::saveButtonPressed1()
 }
 void MainWindow::saveButtonPressed2()
 {
-    if (ui->current_session->value() == 2)
+    if (ui->current->text() == "запись 2")
     {
         if (!ui->brand_name->hasAcceptableInput())
         {
@@ -67,7 +66,8 @@ void MainWindow::saveButtonPressed2()
                                  "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
             return;
         }
-        user_car_prev.current_session = ui->current_session->value();
+        user_car_prev.setCarFifm(ui->firm_selector_2->currentText());
+        user_car_prev.current_session = ui->current->text();
         user_car_prev.setAmount(ui->amount->value());
         user_car_prev.setBrandName(ui->brand_name->text());
         user_car_prev.setClimateControl(ui->climate_control->isChecked());
@@ -84,7 +84,8 @@ void MainWindow::saveButtonPressed2()
 
 void MainWindow::showField1()
 {
-    ui->current_session->setValue(1);
+    ui->current->setText("запись 1");
+    ui->firm_selector_2->setCurrentText(user_car_now.getCarFirm());
     ui->brand_name->setText(user_car_now.getBrandName());
     ui->type_selector->setCurrentText(user_car_now.getType());
     ui->engine_v->setValue(user_car_now.getEngineV());
@@ -102,7 +103,8 @@ void MainWindow::showField1()
 
 void MainWindow::showField2()
 {
-    ui->current_session->setValue(2);
+    ui->current->setText("запись 2");
+    ui->firm_selector_2->setCurrentText(user_car_prev.getCarFirm());
     ui->brand_name->setText(user_car_prev.getBrandName());
     ui->type_selector->setCurrentText(user_car_prev.getType());
     ui->engine_v->setValue(user_car_prev.getEngineV());
@@ -120,8 +122,8 @@ void MainWindow::showField2()
 
 void MainWindow::onTypeChanged(const QString &text)
 {
-    bool isTrailer = (text == "trailer");
-
+    bool isTrailer = (text == "прицеп");
+    ui->firm_selector_2->setEnabled(!isTrailer);
     ui->engine_v->setEnabled(!isTrailer);
     ui->human_capacity->setEnabled(!isTrailer);
     ui->max_speed->setEnabled(!isTrailer);
@@ -137,6 +139,13 @@ void MainWindow::onAmountChanged(int newValue)
     }
     last_amount = newValue;
 }
+
+void MainWindow::currentRowChanged(int row)
+{
+    if (row == 0) showField1();
+    else if (row == 1) showField2();
+};
+
 
 MainWindow::~MainWindow()
 {

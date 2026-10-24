@@ -30,5 +30,7 @@ private slots:
     void showField2();
     void onTypeChanged(const QString &text);
     void onAmountChanged(int newValue);
+    void currentRowChanged(int row);
+
 };
 #endif // MAINWINDOW_H
