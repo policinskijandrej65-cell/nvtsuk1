@@ -57,6 +57,9 @@ public:
     int getPrice() const;
     QDate getDateLastDelivery() const;
     QString getCarFirm() const;
+
+    //is valid record
+    bool isValid();
 };
 
 #endif // CAR

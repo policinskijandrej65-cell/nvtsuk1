@@ -3,9 +3,9 @@
 Car::Car()
 {
     this->props.car_firm = FIRMS.at(0);
-    this->current_session = "Session 1";
+    this->current_session = "Запись 1";
     this->amount = 0;
-    this->props.brand_name = QString("Empty");
+    this->props.brand_name = "";
     this->props.engine_V = 0;
     this->props.human_capacity = 0;
     this->props.weight_capacity = 0;
@@ -177,3 +177,13 @@ QString Car::getCarFirm() const
 {
     return Car::props.car_firm;
 }
+
+bool Car::isValid()
+{
+    if (this->props.brand_name == "")
+    {
+        return false;
+    }
+    return true;
+}
+

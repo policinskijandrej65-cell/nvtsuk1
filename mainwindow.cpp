@@ -8,30 +8,33 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->Save_button1, SIGNAL(clicked()), this, SLOT(saveButtonPressed1()));
-    connect(ui->Save_button2, SIGNAL(clicked()), this, SLOT(saveButtonPressed2()));
-    connect(ui->Show_button1, SIGNAL(clicked()), this, SLOT(showField1()));
-    connect(ui->Show_button2, SIGNAL(clicked()), this, SLOT(showField2()));
+    connect(ui->Save_button, SIGNAL(clicked()), this, SLOT(saveButtonPressed()));
     //connect(ui->current, QOverload<QString>::of(&::), this, [this](int newValue)
             //{ ui->browse_session->setCurrentRow((int)current[8]); });
 
-    connect(ui->browse_session, &QListWidget::currentRowChanged, this, &MainWindow::currentRowChanged);
+    connect(ui->browse_records, &QListWidget::currentRowChanged, this, &MainWindow::currentRowChanged);
 
     connect(ui->type_selector, &QComboBox::currentTextChanged, this, &MainWindow::onTypeChanged);
 
     connect(ui->amount, &QSpinBox::valueChanged, this, &MainWindow::onAmountChanged);
 
+    connect(ui->Create_button, SIGNAL(clicked()), this, SLOT(createRecord()));
+
     ui->type_selector->addItems(CAR_TYPES);
     ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
-    QStringList sessions = {"запись 1", "запись 2"};
-    ui->browse_session->addItems(sessions);
+    QStringList records = {};
+    ui->browse_records->addItems(records);
 }
 
-void MainWindow::saveButtonPressed1()
+void MainWindow::createRecord()
 {
-    if (ui->current->text() == "запись 1")
-    {
+    if (records[number].isValid())
+    number++;
+}
+
+void MainWindow::saveButtonPressed()
+{
         if (!ui->brand_name->hasAcceptableInput())
         {
             QMessageBox::warning(this, "Ошибка",
@@ -39,86 +42,32 @@ void MainWindow::saveButtonPressed1()
                                  "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
             return;
         }
-        user_car_now.setCarFifm(ui->firm_selector_2->currentText());
-        user_car_now.current_session = ui->current->text();
-        user_car_now.setAmount(ui->amount->value());
-        user_car_now.setBrandName(ui->brand_name->text());
-        user_car_now.setClimateControl(ui->climate_control->isChecked());
-        user_car_now.setDateLastDelivery(ui->date_last_delivery->date());
-        user_car_now.setEngineV(ui->engine_v->value());
-        user_car_now.setFrom_1To_100(ui->from_1_to_100->value());
-        user_car_now.setHumanCapacity(ui->human_capacity->value());
-        user_car_now.setMaxSpeed(ui->max_speed->value());
-        user_car_now.setPrice(ui->price->value());
-        user_car_now.setType(ui->type_selector->currentText());
-        user_car_now.setWeightCapacity(ui->weight_capacity->value());
-    }
-
-}
-void MainWindow::saveButtonPressed2()
-{
-    if (ui->current->text() == "запись 2")
-    {
-        if (!ui->brand_name->hasAcceptableInput())
-        {
-            QMessageBox::warning(this, "Ошибка",
-                                 "Название модели введено неверно!\n"
-                                 "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
-            return;
-        }
-        user_car_prev.setCarFifm(ui->firm_selector_2->currentText());
-        user_car_prev.current_session = ui->current->text();
-        user_car_prev.setAmount(ui->amount->value());
-        user_car_prev.setBrandName(ui->brand_name->text());
-        user_car_prev.setClimateControl(ui->climate_control->isChecked());
-        user_car_prev.setDateLastDelivery(ui->date_last_delivery->date());
-        user_car_prev.setEngineV(ui->engine_v->value());
-        user_car_prev.setFrom_1To_100(ui->from_1_to_100->value());
-        user_car_prev.setHumanCapacity(ui->human_capacity->value());
-        user_car_prev.setMaxSpeed(ui->max_speed->value());
-        user_car_prev.setPrice(ui->price->value());
-        user_car_prev.setType(ui->type_selector->currentText());
-        user_car_prev.setWeightCapacity(ui->weight_capacity->value());
-    }
+        records[number].setCarFifm(ui->firm_selector_2->currentText());
+        records[number].current_session = ui->current->text();
+        records[number].setAmount(ui->amount->value());
+        records[number].setBrandName(ui->brand_name->text());
+        records[number].setClimateControl(ui->climate_control->isChecked());
+        records[number].setDateLastDelivery(ui->date_last_delivery->date());
+        records[number].setEngineV(ui->engine_v->value());
+        records[number].setFrom_1To_100(ui->from_1_to_100->value());
+        records[number].setHumanCapacity(ui->human_capacity->value());
+        records[number].setMaxSpeed(ui->max_speed->value());
+        records[number].setPrice(ui->price->value());
+        records[number].setType(ui->type_selector->currentText());
+        records[number].setWeightCapacity(ui->weight_capacity->value());
+        QString info;
+        info.append(records[number].getBrandName()).append("      ").append(QString::number(records[number].getAmount())).append("      ").append(QString::number(records[number].getPrice()));
+        ui->browse_records->addItem(info);
 }
 
-void MainWindow::showField1()
-{
-    ui->current->setText("запись 1");
-    ui->firm_selector_2->setCurrentText(user_car_now.getCarFirm());
-    ui->brand_name->setText(user_car_now.getBrandName());
-    ui->type_selector->setCurrentText(user_car_now.getType());
-    ui->engine_v->setValue(user_car_now.getEngineV());
-    ui->human_capacity->setValue(user_car_now.getHumanCapacity());
-    ui->weight_capacity->setValue(user_car_now.getWeightCapacity());
-    ui->max_speed->setValue(user_car_now.getMaxSpeed());
-    ui->from_1_to_100->setValue(user_car_now.getFrom_1To_100());
-    ui->climate_control->setChecked(user_car_now.getClimateControl());
-    ui->amount->setValue(user_car_now.getAmount());
-    ui->price->setValue(user_car_now.getPrice());
-    ui->date_last_delivery->setDate(user_car_now.getDateLastDelivery());
-    onTypeChanged(ui->type_selector->currentText());
-    last_amount = user_car_now.getAmount();
-}
-
-void MainWindow::showField2()
-{
-    ui->current->setText("запись 2");
-    ui->firm_selector_2->setCurrentText(user_car_prev.getCarFirm());
-    ui->brand_name->setText(user_car_prev.getBrandName());
-    ui->type_selector->setCurrentText(user_car_prev.getType());
-    ui->engine_v->setValue(user_car_prev.getEngineV());
-    ui->human_capacity->setValue(user_car_prev.getHumanCapacity());
-    ui->weight_capacity->setValue(user_car_prev.getWeightCapacity());
-    ui->max_speed->setValue(user_car_prev.getMaxSpeed());
-    ui->from_1_to_100->setValue(user_car_prev.getFrom_1To_100());
-    ui->climate_control->setChecked(user_car_prev.getClimateControl());
-    ui->amount->setValue(user_car_prev.getAmount());
-    ui->price->setValue(user_car_prev.getPrice());
-    ui->date_last_delivery->setDate(user_car_prev.getDateLastDelivery());
-    onTypeChanged(ui->type_selector->currentText());
-    last_amount = user_car_prev.getAmount();
-}
+// void MainWindow::showField()
+// {
+//     ui->current_session->setValue(1);
+//     ui->current->setText("запись 1");
+//     ui->firm_selector_2->setCurrentText(user_car_now.getCarFirm());
+//     ui->brand_name->setText(user_car_now.getBrandName());
+//     ui->type_selector->setCurrentText(user_car_now.getType());
+//     ui->engine_v->setValue(user_car_now.getEngineV());
 
 void MainWindow::onTypeChanged(const QString &text)
 {
@@ -142,8 +91,7 @@ void MainWindow::onAmountChanged(int newValue)
 
 void MainWindow::currentRowChanged(int row)
 {
-    if (row == 0) showField1();
-    else if (row == 1) showField2();
+    //showField(row);
 };
 
 
