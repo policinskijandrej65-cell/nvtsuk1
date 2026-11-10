@@ -20,11 +20,12 @@ public:
 private:
     Ui::MainWindow *ui;
     int last_amount = 0;
-    Car records[100];
+    Car *records[100] = {};
     int number = 0;
 
 private slots:
     void createRecord();
+    void deleteRecord();
     void saveButtonPressed();
     void onTypeChanged(const QString &text);
     void onAmountChanged(int newValue);

@@ -3,7 +3,7 @@
 Car::Car()
 {
     this->props.car_firm = FIRMS.at(0);
-    this->current_session = "Запись 1";
+    this->number_record = 0;
     this->amount = 0;
     this->props.brand_name = "";
     this->props.engine_V = 0;

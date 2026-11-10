@@ -20,44 +20,84 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->Create_button, SIGNAL(clicked()), this, SLOT(createRecord()));
 
+    connect(ui->Delete_button, SIGNAL(clicked()), this, SLOT(deleteRecord()));
+
     ui->type_selector->addItems(CAR_TYPES);
     ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
-    QStringList records = {};
-    ui->browse_records->addItems(records);
+    // QStringList records = {};
+    // ui->browse_records->addItems(records);
 }
 
 void MainWindow::createRecord()
 {
-    if (records[number].isValid())
-    number++;
+    if (records[number] != nullptr)
+    {
+        delete records[number];
+        records[number] = nullptr;
+    }
+    Car *current_record = new Car();
+    records[number] = current_record;
+    records[number]->number_record = number;
+    // //if (records[number]->isValid())
+    // {
+    //     number++;
+    // }
+}
+
+void MainWindow::deleteRecord()
+{
+    int row = ui->browse_records->currentRow();
+    if (row < 0)
+    {
+        if (records[number] != nullptr)
+        {
+            delete records[number];
+            records[number] = nullptr;
+        }
+        return;
+    }
+    delete records[row];
+    delete ui->browse_records->takeItem(row);
+
+    for (int item = row; item < number; item++)
+    {
+        records[item] = records[item + 1];
+        if(records[item] != nullptr)
+        {
+            records[item]->number_record = item;
+        }
+    }
+    number--;
 }
 
 void MainWindow::saveButtonPressed()
 {
-        if (!ui->brand_name->hasAcceptableInput())
-        {
-            QMessageBox::warning(this, "Ошибка",
-                                 "Название модели введено неверно!\n"
-                                 "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
-            return;
-        }
-        records[number].setCarFifm(ui->firm_selector_2->currentText());
-        records[number].current_session = ui->current->text();
-        records[number].setAmount(ui->amount->value());
-        records[number].setBrandName(ui->brand_name->text());
-        records[number].setClimateControl(ui->climate_control->isChecked());
-        records[number].setDateLastDelivery(ui->date_last_delivery->date());
-        records[number].setEngineV(ui->engine_v->value());
-        records[number].setFrom_1To_100(ui->from_1_to_100->value());
-        records[number].setHumanCapacity(ui->human_capacity->value());
-        records[number].setMaxSpeed(ui->max_speed->value());
-        records[number].setPrice(ui->price->value());
-        records[number].setType(ui->type_selector->currentText());
-        records[number].setWeightCapacity(ui->weight_capacity->value());
-        QString info;
-        info.append(records[number].getBrandName()).append("      ").append(QString::number(records[number].getAmount())).append("      ").append(QString::number(records[number].getPrice()));
-        ui->browse_records->addItem(info);
+    if (records[number] == nullptr) return;
+    if (!ui->brand_name->hasAcceptableInput())
+    {
+        QMessageBox::warning(this, "Ошибка",
+                             "Название модели введено неверно!\n"
+                             "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
+        return;
+    }
+    records[number]->setCarFifm(ui->firm_selector_2->currentText());
+    //records[number]->current_session = ui->current->text();
+    records[number]->setAmount(ui->amount->value());
+    records[number]->setBrandName(ui->brand_name->text());
+    records[number]->setClimateControl(ui->climate_control->isChecked());
+    records[number]->setDateLastDelivery(ui->date_last_delivery->date());
+    records[number]->setEngineV(ui->engine_v->value());
+    records[number]->setFrom_1To_100(ui->from_1_to_100->value());
+    records[number]->setHumanCapacity(ui->human_capacity->value());
+    records[number]->setMaxSpeed(ui->max_speed->value());
+    records[number]->setPrice(ui->price->value());
+    records[number]->setType(ui->type_selector->currentText());
+    records[number]->setWeightCapacity(ui->weight_capacity->value());
+    QString info;
+    info.append(records[number]->getBrandName()).append("      ").append(QString::number(records[number]->getAmount())).append("      ").append(QString::number(records[number]->getPrice()));
+    ui->browse_records->addItem(info);
+    number++;
 }
 
 // void MainWindow::showField()

@@ -10,7 +10,7 @@ class Car
 public:
     Car();
     QString car_type;
-    QString current_session;
+    int number_record;
 
 private:
     struct MainProperties
