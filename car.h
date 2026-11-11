@@ -58,8 +58,7 @@ public:
     QDate getDateLastDelivery() const;
     QString getCarFirm() const;
 
-    //is valid record
-    bool isValid();
+    bool operator<(const Car &other) const;
 };
 
 #endif // CAR

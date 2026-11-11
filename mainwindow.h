@@ -22,6 +22,7 @@ private:
     int last_amount = 0;
     Car *records[100] = {};
     int number = 0;
+    void update_browser();
 
 private slots:
     void createRecord();

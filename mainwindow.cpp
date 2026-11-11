@@ -29,51 +29,72 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->browse_records->addItems(records);
 }
 
+
+
+void MainWindow::update_browser()
+{
+    Car* selectedCar = nullptr;
+    int mod_row = ui->browse_records->currentRow();
+    if (mod_row >= 0 && mod_row < number) {
+        selectedCar = records[mod_row];
+    }
+
+    int change = 1;
+    for (int count = 1; count < number && change != 0; count++)
+    {
+        Car* buf = nullptr;
+        change = 0;
+        for (int num = count; num < number; num++)
+        {
+            if ((*records[num]) < (*records[num - 1]) )
+            {
+                buf = records[num];
+                records[num - 1] = records[num];
+                records[num] = buf;
+                change = 1;
+            }
+        }
+    }
+    ui->browse_records->clear();
+    int new_selected_row = -1;
+
+    for (int item = 0; item < number; item++)
+    {
+        records[item]->number_record = item;
+        QString info;
+        info.append(records[item]->getBrandName()).append("      ").append(QString::number(records[item]->getAmount())).append("      ").append(QString::number(records[item]->getPrice()));
+        ui->browse_records->addItem(info);
+
+        if (records[item] == selectedCar)
+        {
+            new_selected_row = item;
+        }
+    }
+    if (new_selected_row != -1)
+    {
+        ui->browse_records->setCurrentRow(new_selected_row);
+    }
+    else
+    {
+        ui->browse_records->setCurrentRow(number-1);
+    }
+}
+
 void MainWindow::createRecord()
 {
-    if (records[number] != nullptr)
+    if (number >= 100)
     {
-        delete records[number];
-        records[number] = nullptr;
-    }
-    Car *current_record = new Car();
-    records[number] = current_record;
-    records[number]->number_record = number;
-    // //if (records[number]->isValid())
-    // {
-    //     number++;
-    // }
-}
-
-void MainWindow::deleteRecord()
-{
-    int row = ui->browse_records->currentRow();
-    if (row < 0)
-    {
-        if (records[number] != nullptr)
-        {
-            delete records[number];
-            records[number] = nullptr;
-        }
+        QMessageBox::warning(this, "Ошибка", "переполнение хранилища (лимит 100 записей).\n"
+                                             "удалите хотя бы одну запись для создания новой");
         return;
     }
-    delete records[row];
-    delete ui->browse_records->takeItem(row);
 
-    for (int item = row; item < number; item++)
-    {
-        records[item] = records[item + 1];
-        if(records[item] != nullptr)
-        {
-            records[item]->number_record = item;
-        }
-    }
-    number--;
-}
+    // if (records[number] != nullptr)
+    // {
+    //     delete records[number];
+    //     records[number] = nullptr;
+    // }
 
-void MainWindow::saveButtonPressed()
-{
-    if (records[number] == nullptr) return;
     if (!ui->brand_name->hasAcceptableInput())
     {
         QMessageBox::warning(this, "Ошибка",
@@ -81,8 +102,10 @@ void MainWindow::saveButtonPressed()
                              "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
         return;
     }
+    Car *current_record = new Car();
+    records[number] = current_record;
     records[number]->setCarFifm(ui->firm_selector_2->currentText());
-    //records[number]->current_session = ui->current->text();
+    records[number]->number_record = number;
     records[number]->setAmount(ui->amount->value());
     records[number]->setBrandName(ui->brand_name->text());
     records[number]->setClimateControl(ui->climate_control->isChecked());
@@ -94,20 +117,66 @@ void MainWindow::saveButtonPressed()
     records[number]->setPrice(ui->price->value());
     records[number]->setType(ui->type_selector->currentText());
     records[number]->setWeightCapacity(ui->weight_capacity->value());
-    QString info;
-    info.append(records[number]->getBrandName()).append("      ").append(QString::number(records[number]->getAmount())).append("      ").append(QString::number(records[number]->getPrice()));
-    ui->browse_records->addItem(info);
+
     number++;
+
+    update_browser();
+    int found = false;
+    for (int i = 0; i < number && !found; i++)
+    {
+        if (records[i] == current_record)
+        {
+            ui->browse_records->setCurrentRow(i);
+            found = true;
+        }
+    }
 }
 
-// void MainWindow::showField()
-// {
-//     ui->current_session->setValue(1);
-//     ui->current->setText("запись 1");
-//     ui->firm_selector_2->setCurrentText(user_car_now.getCarFirm());
-//     ui->brand_name->setText(user_car_now.getBrandName());
-//     ui->type_selector->setCurrentText(user_car_now.getType());
-//     ui->engine_v->setValue(user_car_now.getEngineV());
+void MainWindow::deleteRecord()
+{
+    int row = ui->browse_records->currentRow();
+    if (row < 0 || row >= number) return;
+
+    delete records[row];
+
+    for (int item = row; item < number; item++)
+    {
+        records[item] = records[item + 1];
+    }
+    records[number - 1] = nullptr;
+    number--;
+
+    update_browser();
+}
+
+void MainWindow::saveButtonPressed()
+{
+    int row = ui->browse_records->currentRow();
+    if (row < 0 || row >= number) return;
+
+    if (!ui->brand_name->hasAcceptableInput())
+    {
+        QMessageBox::warning(this, "Ошибка",
+                             "Название модели введено неверно!\n"
+                             "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
+        return;
+    }
+
+    records[row]->setCarFifm(ui->firm_selector_2->currentText());
+    records[row]->setAmount(ui->amount->value());
+    records[row]->setBrandName(ui->brand_name->text());
+    records[row]->setClimateControl(ui->climate_control->isChecked());
+    records[row]->setDateLastDelivery(ui->date_last_delivery->date());
+    records[row]->setEngineV(ui->engine_v->value());
+    records[row]->setFrom_1To_100(ui->from_1_to_100->value());
+    records[row]->setHumanCapacity(ui->human_capacity->value());
+    records[row]->setMaxSpeed(ui->max_speed->value());
+    records[row]->setPrice(ui->price->value());
+    records[row]->setType(ui->type_selector->currentText());
+    records[row]->setWeightCapacity(ui->weight_capacity->value());
+
+    update_browser();
+}
 
 void MainWindow::onTypeChanged(const QString &text)
 {
@@ -131,11 +200,31 @@ void MainWindow::onAmountChanged(int newValue)
 
 void MainWindow::currentRowChanged(int row)
 {
-    //showField(row);
+    if (row < 0 || row >= number) return;
+
+    ui->brand_name->setText(records[row]->getBrandName());
+    ui->amount->setValue(records[row]->getAmount());
+    ui->price->setValue(records[row]->getPrice());
+    ui->engine_v->setValue(records[row]->getEngineV());
+    ui->human_capacity->setValue(records[row]->getHumanCapacity());
+    ui->weight_capacity->setValue(records[row]->getWeightCapacity());
+    ui->max_speed->setValue(records[row]->getMaxSpeed());
+    ui->from_1_to_100->setValue(records[row]->getFrom_1To_100());
+    ui->climate_control->setChecked(records[row]->getClimateControl());
+    ui->type_selector->setCurrentText(records[row]->getType());
+    ui->firm_selector_2->setCurrentText(records[row]->getCarFirm());
+    ui->date_last_delivery->setDate(records[row]->getDateLastDelivery());
 };
+
+
 
 
 MainWindow::~MainWindow()
 {
+    for (int i = 0; i < 100; ++i)
+    {
+        delete records[i];
+        records[i] = nullptr;
+    }
     delete ui;
 }

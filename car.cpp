@@ -16,6 +16,29 @@ Car::Car()
     this->date_last_delivery = QDate::currentDate();
 }
 
+bool Car::operator<(const Car &other) const
+{
+    //тип, объем двигателя, вместимость, цена, название модели
+    if (car_type < other.car_type) return true;
+    if (car_type == other.car_type)
+    {
+        if (props.engine_V < other.props.engine_V) return true;
+        if (props.engine_V == other.props.engine_V)
+        {
+            if (props.human_capacity < other.props.human_capacity) return true;
+            if (props.human_capacity == other.props.human_capacity)
+            {
+                if (price < other.price) return true;
+                if (price == other.price)
+                {
+                    if (props.brand_name < other.props.brand_name) return true;
+                }
+            }
+
+        }
+    }
+    return false;
+}
 
 //SETTERS
 bool Car::setBrandName(QString user_string)
@@ -177,13 +200,3 @@ QString Car::getCarFirm() const
 {
     return Car::props.car_firm;
 }
-
-bool Car::isValid()
-{
-    if (this->props.brand_name == "")
-    {
-        return false;
-    }
-    return true;
-}
-
