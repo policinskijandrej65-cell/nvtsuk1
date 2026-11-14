@@ -28,31 +28,37 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
+void MainWindow::addToBase(Car *records[], Car *current_record, int *number)
+{
+    records[*number] = current_record;
+    records[*number]->setCarFifm(ui->firm_selector_2->currentText());
+    records[*number]->number_record = *number;
+    records[*number]->setAmount(ui->amount->value());
+    records[*number]->setBrandName(ui->brand_name->text());
+    records[*number]->setClimateControl(ui->climate_control->isChecked());
+    records[*number]->setDateLastDelivery(ui->date_last_delivery->date());
+    records[*number]->setEngineV(ui->engine_v->value());
+    records[*number]->setFrom_1To_100(ui->from_1_to_100->value());
+    records[*number]->setHumanCapacity(ui->human_capacity->value());
+    records[*number]->setMaxSpeed(ui->max_speed->value());
+    records[*number]->setPrice(ui->price->value());
+    records[*number]->setType(ui->type_selector->currentText());
+    records[*number]->setWeightCapacity(ui->weight_capacity->value());
+
+    (*number)++;
+
+    update_browser();
+}
 
 void MainWindow::update_browser()
 {
-    Car* selectedCar = nullptr;
+    Car* selectedCar;
     int mod_row = ui->browse_records->currentRow();
-    if (mod_row >= 0 && mod_row < number) {
-        selectedCar = records[mod_row];
-    }
 
-    int change = 1;
-    for (int count = 1; count < number && change != 0; count++)
-    {
-        Car* buf = nullptr;
-        change = 0;
-        for (int num = count; num < number; num++)
-        {
-            if ((*records[num]) < (*records[num - 1]) )
-            {
-                buf = records[num];
-                records[num] = records[num-1];
-                records[num-1] = buf;
-                change = 1;
-            }
-        }
-    }
+    int pos;
+    //sortirovku dobavit'
+    // for (pos= 0; pos < number && *records[pos] < *selectedCar; pos++);
+    // records[pos] = selectedCar;
     ui->browse_records->clear();
     int new_selected_row = -1;
 
@@ -87,12 +93,6 @@ void MainWindow::createRecord()
         return;
     }
 
-    // if (records[number] != nullptr)
-    // {
-    //     delete records[number];
-    //     records[number] = nullptr;
-    // }
-
     if (!ui->brand_name->hasAcceptableInput())
     {
         QMessageBox::warning(this, "Ошибка",
@@ -101,24 +101,8 @@ void MainWindow::createRecord()
         return;
     }
     Car *current_record = new Car();
-    records[number] = current_record;
-    records[number]->setCarFifm(ui->firm_selector_2->currentText());
-    records[number]->number_record = number;
-    records[number]->setAmount(ui->amount->value());
-    records[number]->setBrandName(ui->brand_name->text());
-    records[number]->setClimateControl(ui->climate_control->isChecked());
-    records[number]->setDateLastDelivery(ui->date_last_delivery->date());
-    records[number]->setEngineV(ui->engine_v->value());
-    records[number]->setFrom_1To_100(ui->from_1_to_100->value());
-    records[number]->setHumanCapacity(ui->human_capacity->value());
-    records[number]->setMaxSpeed(ui->max_speed->value());
-    records[number]->setPrice(ui->price->value());
-    records[number]->setType(ui->type_selector->currentText());
-    records[number]->setWeightCapacity(ui->weight_capacity->value());
 
-    number++;
-
-    update_browser();
+    addToBase(records, current_record, &number);
     int found = false;
     for (int i = 0; i < number && !found; i++)
     {
@@ -216,15 +200,16 @@ void MainWindow::currentRowChanged(int row)
 
 void MainWindow::insert10()
 {
-    if (number < 91)
+    if (number + 10 <= 100)
     {
         for (int i = 0; i < 10; i++)
         {
-            ui->brand_name->setText("Car" + QString::number(i));
-            ui->amount->setValue(i);
-            ui->price->setValue(i*i+20);
-            ui->Create_button->click();
+
         }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Недостаточно места для добавления 10 записей!");
     }
 }
 

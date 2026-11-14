@@ -25,6 +25,7 @@ private:
     void update_browser();
 
 private slots:
+    void addToBase(Car *records[], Car *current_record, int *number);
     void createRecord();
     void deleteRecord();
     void saveButtonPressed();
