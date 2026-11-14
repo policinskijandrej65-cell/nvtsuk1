@@ -28,6 +28,7 @@ private slots:
     void createRecord();
     void deleteRecord();
     void saveButtonPressed();
+    void insert10();
     void onTypeChanged(const QString &text);
     void onAmountChanged(int newValue);
     void currentRowChanged(int row);

@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->Save_button, SIGNAL(clicked()), this, SLOT(saveButtonPressed()));
-    //connect(ui->current, QOverload<QString>::of(&::), this, [this](int newValue)
-            //{ ui->browse_session->setCurrentRow((int)current[8]); });
 
     connect(ui->browse_records, &QListWidget::currentRowChanged, this, &MainWindow::currentRowChanged);
 
@@ -22,11 +20,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->Delete_button, SIGNAL(clicked()), this, SLOT(deleteRecord()));
 
+    connect(ui->insert10, SIGNAL(clicked()), this, SLOT(insert10()));
+
     ui->type_selector->addItems(CAR_TYPES);
     ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
-    // QStringList records = {};
-    // ui->browse_records->addItems(records);
 }
 
 
@@ -49,8 +47,8 @@ void MainWindow::update_browser()
             if ((*records[num]) < (*records[num - 1]) )
             {
                 buf = records[num];
-                records[num - 1] = records[num];
-                records[num] = buf;
+                records[num] = records[num-1];
+                records[num-1] = buf;
                 change = 1;
             }
         }
@@ -216,7 +214,19 @@ void MainWindow::currentRowChanged(int row)
     ui->date_last_delivery->setDate(records[row]->getDateLastDelivery());
 };
 
-
+void MainWindow::insert10()
+{
+    if (number < 91)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            ui->brand_name->setText("Car" + QString::number(i));
+            ui->amount->setValue(i);
+            ui->price->setValue(i*i+20);
+            ui->Create_button->click();
+        }
+    }
+}
 
 
 MainWindow::~MainWindow()
