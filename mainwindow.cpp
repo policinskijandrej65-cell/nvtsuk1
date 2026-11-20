@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     connect(ui->Save_button, SIGNAL(clicked()), this, SLOT(saveButtonPressed()));
 
     connect(ui->browse_records, &QListWidget::currentRowChanged, this, &MainWindow::currentRowChanged);
@@ -48,53 +49,85 @@ void MainWindow::addToBase(Car *records[], Car *current_record, int *number)
     (*number)++;
 }
 
-void MainWindow::update_browser()
+void MainWindow::update_browser(Car* selectedCar)
 {
-    if (number < 0) return;
-    int mod_row = ui->browse_records->currentRow();
-    if (mod_row < 0)
+    if (number <= 0)
     {
-        mod_row = 0;
-    }
-    if (mod_row >= number)
-    {
-    mod_row = number - 1;
+        ui->browse_records->clear();
+        return;
     }
 
-    Car* selectedCar = records[mod_row];
-    //найти selectedCar, удалить его с текущей позиции и закрыть место удаления
+
+    //если запись не передана, сохраняем текущую выбранную запись
+    if (selectedCar == nullptr)
+    {
+        int row = ui->browse_records->currentRow();
+
+        if (row >= 0 && row < number)
+        {
+            selectedCar = records[row];
+        }
+    }
+
+    // Ищем selectedCar, удаляем его с текущей позиции и закрываем место удаления
     int old_pos = 0;
-    for (old_pos; old_pos<number && records[old_pos] != selectedCar; old_pos++);
-    for (int new_pos = old_pos; new_pos < number - 1; new_pos++)
-    {
-        records[new_pos] = records[new_pos + 1];
-    }
-    number--;
+    for (old_pos; old_pos < number && records[old_pos] != selectedCar; old_pos++);
 
-    //найти место вставки
-    int pos = 0;
-    for (pos; pos < number && *records[pos] < *selectedCar; pos++ );
 
-    //сдвинуть все элементы от нужного места вправо и вставить
-    for (int move = number; move > pos ; move--)
+    //перемещаем запись, когда она найдена
+    if (old_pos < number)
     {
-        records[move] = records[move - 1];
+        for (int new_pos = old_pos; new_pos < number - 1; new_pos++)
+        {
+            records[new_pos] = records[new_pos + 1];
+        }
+
+        number--;
+
+        // Находим место вставки
+        int pos = 0;
+        for (pos; pos < number && *records[pos] < *selectedCar; pos++);
+
+        // Сдвигаем элементы вправо и вставляем запись
+        for (int move = number; move > pos; move--)
+        {
+            records[move] = records[move - 1];
+        }
+
+        records[pos] = selectedCar;
+        number++;
     }
-    records[pos] = selectedCar;
-    number++;
 
     ui->browse_records->clear();
+
+    //запоминаем позицию нужной записи
+    int selectedRow = -1;
 
     for (int item = 0; item < number; item++)
     {
         records[item]->number_record = item;
-        QString info;
-        info.append(records[item]->getBrandName()).append("      ").append(QString::number(records[item]->getAmount())).append("      ").append(QString::number(records[item]->getPrice()));
+
+        QString info = QString("%1%2%3")
+        .arg(records[item]->getBrandName(),              -30)  // текст по левому
+        .arg(QString::number(records[item]->getAmount()),  8) // числа по правому
+        .arg(QString::number(records[item]->getPrice()),  10);
+
         ui->browse_records->addItem(info);
+
+        //определяем новое положение записи
+        if (records[item] == selectedCar)
+        {
+            selectedRow = item;
+        }
     }
-    ui->browse_records->setCurrentRow(pos);
 
-
+    // выделяем запись
+    if (selectedRow >= 0)
+    {
+        ui->browse_records->setCurrentRow(selectedRow);
+    }
+    qDebug() << "Выделена строка:" << selectedRow;
+    qDebug() << "Адрес записи:" << selectedCar;
 }
 
 
@@ -115,21 +148,14 @@ void MainWindow::createRecord()
                              "Оно должно начинаться с буквы и содержать только латинские буквы и цифры.");
         return;
     }
+
     Car *current_record = new Car();
 
     addToBase(records, current_record, &number);
-    int found = false;
-    for (int i = 0; i < number && !found; i++)
-    {
-        if (records[i] == current_record)
-        {
-            ui->browse_records->setCurrentRow(i);
-            found = true;
-        }
-    }
-    update_browser();
-}
 
+    // передаём указатель на новую запись (чтобы в браузере выделить)
+    update_browser(current_record);
+}
 
 
 void MainWindow::deleteRecord()
@@ -143,12 +169,30 @@ void MainWindow::deleteRecord()
     {
         records[item] = records[item + 1];
     }
+
     records[number - 1] = nullptr;
     number--;
 
-    update_browser();
-}
+    // проверяем, остались ли записи
+    if (number == 0)
+    {
+        ui->browse_records->clear();
+        return;
+    }
 
+
+    // Если есть следующий элемент, выбираем его если удалили последний, выбираем предыдущий
+    int newRow = (row < number) ? row : number - 1;
+
+    update_browser(records[newRow]);
+
+
+    qDebug() << "Удаляем строку:" << row;
+    qDebug() << "Количество записей:" << number;
+    qDebug() << "Выбираем строку:" << newRow;
+    qDebug() << "Название:" << records[newRow]->getBrandName();
+    qDebug() << "Адрес:" << records[newRow];
+}
 
 
 void MainWindow::saveButtonPressed()
@@ -176,8 +220,9 @@ void MainWindow::saveButtonPressed()
     records[row]->setPrice(ui->price->value());
     records[row]->setType(ui->type_selector->currentText());
     records[row]->setWeightCapacity(ui->weight_capacity->value());
+    records[row]->number_record = number;
 
-    update_browser();
+    update_browser(records[row]);
 }
 
 
@@ -230,14 +275,21 @@ void MainWindow::insert10()
 {
     if (number + 10 <= 100)
     {
+        Car* last_record = nullptr;
+
         for (int i = 0; i < 10; i++)
         {
             Car *current_record = new Car();
+
             addToBase(records, current_record, &number);
-            current_record->setBrandName("ExampleCar");
-            update_browser();
-            ui->browse_records->setCurrentRow(number - 1);
+            current_record->setBrandName("exampleCar");
+            current_record->setAmount(i);
+            current_record->setEngineV(0.5 * i + i * i);
+            current_record->setPrice(20+i);
+            update_browser(current_record);
+            last_record = current_record;
         }
+        update_browser(last_record);
     }
     else
     {

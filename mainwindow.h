@@ -22,7 +22,7 @@ private:
     int last_amount = 0;
     Car *records[100] = {};
     int number = 0;
-    void update_browser();
+    void update_browser(Car* selectedCar = nullptr);
 
 private slots:
     void addToBase(Car *records[], Car *current_record, int *number);

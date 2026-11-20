@@ -32,6 +32,11 @@ bool Car::operator<(const Car &other) const
                 if (price == other.price)
                 {
                     if (props.brand_name < other.props.brand_name) return true;
+                    if (props.brand_name == other.props.brand_name)
+                    {
+                        if (number_record < other.number_record) return true;
+                    }
+
                 }
             }
 
