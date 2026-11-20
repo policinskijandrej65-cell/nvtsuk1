@@ -46,21 +46,44 @@ void MainWindow::addToBase(Car *records[], Car *current_record, int *number)
     records[*number]->setWeightCapacity(ui->weight_capacity->value());
 
     (*number)++;
-
-    update_browser();
 }
 
 void MainWindow::update_browser()
 {
-    Car* selectedCar;
+    if (number < 0) return;
     int mod_row = ui->browse_records->currentRow();
+    if (mod_row < 0)
+    {
+        mod_row = 0;
+    }
+    if (mod_row >= number)
+    {
+    mod_row = number - 1;
+    }
 
-    int pos;
-    //sortirovku dobavit'
-    // for (pos= 0; pos < number && *records[pos] < *selectedCar; pos++);
-    // records[pos] = selectedCar;
+    Car* selectedCar = records[mod_row];
+    //найти selectedCar, удалить его с текущей позиции и закрыть место удаления
+    int old_pos = 0;
+    for (old_pos; old_pos<number && records[old_pos] != selectedCar; old_pos++);
+    for (int new_pos = old_pos; new_pos < number - 1; new_pos++)
+    {
+        records[new_pos] = records[new_pos + 1];
+    }
+    number--;
+
+    //найти место вставки
+    int pos = 0;
+    for (pos; pos < number && *records[pos] < *selectedCar; pos++ );
+
+    //сдвинуть все элементы от нужного места вправо и вставить
+    for (int move = number; move > pos ; move--)
+    {
+        records[move] = records[move - 1];
+    }
+    records[pos] = selectedCar;
+    number++;
+
     ui->browse_records->clear();
-    int new_selected_row = -1;
 
     for (int item = 0; item < number; item++)
     {
@@ -68,21 +91,13 @@ void MainWindow::update_browser()
         QString info;
         info.append(records[item]->getBrandName()).append("      ").append(QString::number(records[item]->getAmount())).append("      ").append(QString::number(records[item]->getPrice()));
         ui->browse_records->addItem(info);
+    }
+    ui->browse_records->setCurrentRow(pos);
 
-        if (records[item] == selectedCar)
-        {
-            new_selected_row = item;
-        }
-    }
-    if (new_selected_row != -1)
-    {
-        ui->browse_records->setCurrentRow(new_selected_row);
-    }
-    else
-    {
-        ui->browse_records->setCurrentRow(number-1);
-    }
+
 }
+
+
 
 void MainWindow::createRecord()
 {
@@ -112,7 +127,10 @@ void MainWindow::createRecord()
             found = true;
         }
     }
+    update_browser();
 }
+
+
 
 void MainWindow::deleteRecord()
 {
@@ -121,7 +139,7 @@ void MainWindow::deleteRecord()
 
     delete records[row];
 
-    for (int item = row; item < number; item++)
+    for (int item = row; item < number - 1; item++)
     {
         records[item] = records[item + 1];
     }
@@ -130,6 +148,8 @@ void MainWindow::deleteRecord()
 
     update_browser();
 }
+
+
 
 void MainWindow::saveButtonPressed()
 {
@@ -160,6 +180,8 @@ void MainWindow::saveButtonPressed()
     update_browser();
 }
 
+
+
 void MainWindow::onTypeChanged(const QString &text)
 {
     bool isTrailer = (text == "прицеп");
@@ -171,6 +193,8 @@ void MainWindow::onTypeChanged(const QString &text)
     ui->climate_control->setEnabled(!isTrailer);
 }
 
+
+
 void MainWindow::onAmountChanged(int newValue)
 {
     if (newValue > last_amount)
@@ -179,6 +203,8 @@ void MainWindow::onAmountChanged(int newValue)
     }
     last_amount = newValue;
 }
+
+
 
 void MainWindow::currentRowChanged(int row)
 {
@@ -198,13 +224,19 @@ void MainWindow::currentRowChanged(int row)
     ui->date_last_delivery->setDate(records[row]->getDateLastDelivery());
 };
 
+
+
 void MainWindow::insert10()
 {
     if (number + 10 <= 100)
     {
         for (int i = 0; i < 10; i++)
         {
-
+            Car *current_record = new Car();
+            addToBase(records, current_record, &number);
+            current_record->setBrandName("ExampleCar");
+            update_browser();
+            ui->browse_records->setCurrentRow(number - 1);
         }
     }
     else
@@ -212,6 +244,7 @@ void MainWindow::insert10()
         QMessageBox::warning(this, "Ошибка", "Недостаточно места для добавления 10 записей!");
     }
 }
+
 
 
 MainWindow::~MainWindow()
