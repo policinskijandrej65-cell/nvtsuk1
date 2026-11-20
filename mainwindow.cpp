@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->type_selector->addItems(CAR_TYPES);
     ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
+    QFont mono("Courier New", 10);
+    mono.setStyleHint(QFont::Monospace);
+    ui->browse_records->setFont(mono);
 }
 
 
@@ -106,13 +109,26 @@ void MainWindow::update_browser(Car* selectedCar)
     for (int item = 0; item < number; item++)
     {
         records[item]->number_record = item;
+        QString info = (records[item]->getBrandName());
+        int space = info.length();
+        while (space < 32)
+        {
+            info += " ";
+            space++;
+        }
+        space += QString::number(records[item]->getAmount()).length();
+        info += QString::number(records[item]->getAmount());
+        while (space < 38)
+        {
+            info += " ";
+            space++;
+        }
+        info += QString::number(records[item]->getPrice());
+        // QString info = (records[item]->getBrandName()) + "                " +
+        // (QString::number(records[item]->getAmount())) + "                         " +
+        // (QString::number(records[item]->getPrice())) + "          ";
 
-        QString info = QString("%1%2%3")
-        .arg(records[item]->getBrandName(),              -30)  // текст по левому
-        .arg(QString::number(records[item]->getAmount()),  8) // числа по правому
-        .arg(QString::number(records[item]->getPrice()),  10);
-
-        ui->browse_records->addItem(info);
+        ui->browse_records->insertItem(number, info);
 
         //определяем новое положение записи
         if (records[item] == selectedCar)
@@ -284,7 +300,7 @@ void MainWindow::insert10()
             addToBase(records, current_record, &number);
             current_record->setBrandName("exampleCar");
             current_record->setAmount(i);
-            current_record->setEngineV(0.5 * i + i * i);
+            current_record->setEngineV(0.5 * i + i / 10);
             current_record->setPrice(20+i);
             update_browser(current_record);
             last_record = current_record;
