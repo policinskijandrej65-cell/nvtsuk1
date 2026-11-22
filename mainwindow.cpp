@@ -23,7 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->insert10, SIGNAL(clicked()), this, SLOT(insert10()));
 
+    connect(ui->choose, SIGNAL(clicked()), this, SLOT(only_type()));
+
+    connect(ui->cancel, SIGNAL(clicked()), this, SLOT(cancel()));
     ui->type_selector->addItems(CAR_TYPES);
+    ui->only_type->addItems(CAR_TYPES);
     ui->firm_selector_2->addItems((FIRMS));
     ui->brand_name->setValidator(new Validator(this));
     QFont mono("Courier New", 10);
@@ -32,9 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
-void MainWindow::addToBase(Car *records[], Car *current_record, int *number)
+void MainWindow::addToBase(Car *current_record, int *number)
 {
+
     records[*number] = current_record;
+    sorted[*number] = current_record;
     records[*number]->setCarFifm(ui->firm_selector_2->currentText());
     records[*number]->number_record = *number;
     records[*number]->setAmount(ui->amount->value());
@@ -111,14 +117,14 @@ void MainWindow::update_browser(Car* selectedCar)
         records[item]->number_record = item;
         QString info = (records[item]->getBrandName());
         int space = info.length();
-        while (space < 32)
+        while (space < 35)
         {
             info += " ";
             space++;
         }
         space += QString::number(records[item]->getAmount()).length();
         info += QString::number(records[item]->getAmount());
-        while (space < 38)
+        while (space < 42)
         {
             info += " ";
             space++;
@@ -165,9 +171,17 @@ void MainWindow::createRecord()
         return;
     }
 
+    if ( ui->date_last_delivery->date() > QDate::currentDate())
+    {
+        QMessageBox::warning(this, "Ошибка",
+                             "Дата введена неверно\n"
+                             "Она должна быть не более текущей даты.");
+        return;
+    }
+
     Car *current_record = new Car();
 
-    addToBase(records, current_record, &number);
+    addToBase(current_record, &number);
 
     // передаём указатель на новую запись (чтобы в браузере выделить)
     update_browser(current_record);
@@ -297,8 +311,8 @@ void MainWindow::insert10()
         {
             Car *current_record = new Car();
 
-            addToBase(records, current_record, &number);
-            current_record->setBrandName("exampleCar");
+            addToBase(current_record, &number);
+            current_record->setBrandName("exampleCar"+QString::number(number));
             current_record->setAmount(i);
             current_record->setEngineV(0.5 * i + i / 10);
             current_record->setPrice(20+i);
@@ -313,6 +327,76 @@ void MainWindow::insert10()
     }
 }
 
+void MainWindow::only_type()
+{
+    ui->browse_records->clear();
+    for (int i = 0; i < number; i++)
+    {
+        records[i] = sorted[i];
+    }
+
+    int count = 0;
+    for (int item = 0; item < number; item++)
+    {
+        if (records[item]->car_type == ui->only_type->currentText() &&
+            records[item]->getHumanCapacity() == ui->only_capacity->value())
+        {
+            records[count] = records[item];
+            QString info = (records[item]->getBrandName());
+            int space = info.length();
+            while (space < 35)
+            {
+                info += " ";
+                space++;
+            }
+            space += QString::number(records[item]->getAmount()).length();
+            info += QString::number(records[item]->getAmount());
+            while (space < 42)
+            {
+                info += " ";
+                space++;
+            }
+            info += QString::number(records[item]->getPrice());
+            ui->browse_records->insertItem(count, info);
+            count++;
+        }
+    }
+    ui->amount->setDisabled(true);
+    ui->human_capacity->setDisabled(true);
+    ui->weight_capacity->setDisabled(true);
+    ui->type_selector->setDisabled(true);
+    ui->firm_selector_2->setDisabled(true);
+    ui->brand_name->setDisabled(true);
+    ui->price->setDisabled(true);
+    ui->date_last_delivery->setDisabled(true);
+    ui->engine_v->setDisabled(true);
+    ui->max_speed->setDisabled(true);
+    ui->from_1_to_100->setDisabled(true);
+    ui->climate_control->setDisabled(true);
+}
+
+void MainWindow::cancel()
+{
+    for (int i = 0; i < number; i++)
+    {
+        records[i] = sorted[i];
+    }
+    update_browser();
+    ui->amount->setDisabled(false);
+    ui->human_capacity->setDisabled(false);
+    ui->weight_capacity->setDisabled(false);
+    ui->type_selector->setDisabled(false);
+    ui->firm_selector_2->setDisabled(false);
+    ui->brand_name->setDisabled(false);
+    ui->price->setDisabled(false);
+    ui->date_last_delivery->setDisabled(false);
+    ui->engine_v->setDisabled(false);
+    ui->max_speed->setDisabled(false);
+    ui->from_1_to_100->setDisabled(false);
+    ui->climate_control->setDisabled(false);
+
+    //onTypeChanged(ui->type_selector->currentText());
+}
 
 
 MainWindow::~MainWindow()
